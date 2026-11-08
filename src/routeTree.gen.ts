@@ -10,33 +10,167 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedAnalisisRouteImport } from './routes/_authenticated/analisis'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedHabitosRouteImport } from './routes/_authenticated/habitos'
+import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
+import { Route as AuthenticatedPerfilRouteImport } from './routes/_authenticated/perfil'
+import { Route as AuthenticatedProgresoRouteImport } from './routes/_authenticated/progreso'
+import { Route as AuthenticatedRetosRouteImport } from './routes/_authenticated/retos'
+import { Route as AuthenticatedCoachIndexRouteImport } from './routes/_authenticated/coach.index'
+import { Route as AuthenticatedCoachThreadIdRouteImport } from './routes/_authenticated/coach.$threadId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAnalisisRoute = AuthenticatedAnalisisRouteImport.update({
+  id: '/analisis',
+  path: '/analisis',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedHabitosRoute = AuthenticatedHabitosRouteImport.update({
+  id: '/habitos',
+  path: '/habitos',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedOnboardingRoute = AuthenticatedOnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedPerfilRoute = AuthenticatedPerfilRouteImport.update({
+  id: '/perfil',
+  path: '/perfil',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedProgresoRoute = AuthenticatedProgresoRouteImport.update({
+  id: '/progreso',
+  path: '/progreso',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedRetosRoute = AuthenticatedRetosRouteImport.update({
+  id: '/retos',
+  path: '/retos',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedCoachIndexRoute = AuthenticatedCoachIndexRouteImport.update({
+  id: '/coach/',
+  path: '/coach/',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedCoachThreadIdRoute =
+  AuthenticatedCoachThreadIdRouteImport.update({
+    id: '/coach/$threadId',
+    path: '/coach/$threadId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/analisis': typeof AuthenticatedAnalisisRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/habitos': typeof AuthenticatedHabitosRoute
+  '/onboarding': typeof AuthenticatedOnboardingRoute
+  '/perfil': typeof AuthenticatedPerfilRoute
+  '/progreso': typeof AuthenticatedProgresoRoute
+  '/retos': typeof AuthenticatedRetosRoute
+  '/coach/$threadId': typeof AuthenticatedCoachThreadIdRoute
+  '/coach/': typeof AuthenticatedCoachIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/analisis': typeof AuthenticatedAnalisisRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/habitos': typeof AuthenticatedHabitosRoute
+  '/onboarding': typeof AuthenticatedOnboardingRoute
+  '/perfil': typeof AuthenticatedPerfilRoute
+  '/progreso': typeof AuthenticatedProgresoRoute
+  '/retos': typeof AuthenticatedRetosRoute
+  '/coach/$threadId': typeof AuthenticatedCoachThreadIdRoute
+  '/coach': typeof AuthenticatedCoachIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/_authenticated/analisis': typeof AuthenticatedAnalisisRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/habitos': typeof AuthenticatedHabitosRoute
+  '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
+  '/_authenticated/perfil': typeof AuthenticatedPerfilRoute
+  '/_authenticated/progreso': typeof AuthenticatedProgresoRoute
+  '/_authenticated/retos': typeof AuthenticatedRetosRoute
+  '/_authenticated/coach/$threadId': typeof AuthenticatedCoachThreadIdRoute
+  '/_authenticated/coach/': typeof AuthenticatedCoachIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/analisis'
+    | '/dashboard'
+    | '/habitos'
+    | '/onboarding'
+    | '/perfil'
+    | '/progreso'
+    | '/retos'
+    | '/coach/$threadId'
+    | '/coach/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/analisis'
+    | '/dashboard'
+    | '/habitos'
+    | '/onboarding'
+    | '/perfil'
+    | '/progreso'
+    | '/retos'
+    | '/coach/$threadId'
+    | '/coach'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/_authenticated/analisis'
+    | '/_authenticated/dashboard'
+    | '/_authenticated/habitos'
+    | '/_authenticated/onboarding'
+    | '/_authenticated/perfil'
+    | '/_authenticated/progreso'
+    | '/_authenticated/retos'
+    | '/_authenticated/coach/$threadId'
+    | '/_authenticated/coach/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +182,117 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/analisis': {
+      id: '/_authenticated/analisis'
+      path: '/analisis'
+      fullPath: '/analisis'
+      preLoaderRoute: typeof AuthenticatedAnalisisRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/habitos': {
+      id: '/_authenticated/habitos'
+      path: '/habitos'
+      fullPath: '/habitos'
+      preLoaderRoute: typeof AuthenticatedHabitosRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/onboarding': {
+      id: '/_authenticated/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof AuthenticatedOnboardingRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/perfil': {
+      id: '/_authenticated/perfil'
+      path: '/perfil'
+      fullPath: '/perfil'
+      preLoaderRoute: typeof AuthenticatedPerfilRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/progreso': {
+      id: '/_authenticated/progreso'
+      path: '/progreso'
+      fullPath: '/progreso'
+      preLoaderRoute: typeof AuthenticatedProgresoRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/retos': {
+      id: '/_authenticated/retos'
+      path: '/retos'
+      fullPath: '/retos'
+      preLoaderRoute: typeof AuthenticatedRetosRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/coach/': {
+      id: '/_authenticated/coach/'
+      path: '/coach'
+      fullPath: '/coach/'
+      preLoaderRoute: typeof AuthenticatedCoachIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/coach/$threadId': {
+      id: '/_authenticated/coach/$threadId'
+      path: '/coach/$threadId'
+      fullPath: '/coach/$threadId'
+      preLoaderRoute: typeof AuthenticatedCoachThreadIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAnalisisRoute: typeof AuthenticatedAnalisisRoute
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedHabitosRoute: typeof AuthenticatedHabitosRoute
+  AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
+  AuthenticatedPerfilRoute: typeof AuthenticatedPerfilRoute
+  AuthenticatedProgresoRoute: typeof AuthenticatedProgresoRoute
+  AuthenticatedRetosRoute: typeof AuthenticatedRetosRoute
+  AuthenticatedCoachThreadIdRoute: typeof AuthenticatedCoachThreadIdRoute
+  AuthenticatedCoachIndexRoute: typeof AuthenticatedCoachIndexRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAnalisisRoute: AuthenticatedAnalisisRoute,
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedHabitosRoute: AuthenticatedHabitosRoute,
+  AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
+  AuthenticatedPerfilRoute: AuthenticatedPerfilRoute,
+  AuthenticatedProgresoRoute: AuthenticatedProgresoRoute,
+  AuthenticatedRetosRoute: AuthenticatedRetosRoute,
+  AuthenticatedCoachThreadIdRoute: AuthenticatedCoachThreadIdRoute,
+  AuthenticatedCoachIndexRoute: AuthenticatedCoachIndexRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
