@@ -38,7 +38,7 @@ function ProgressPage() {
     xp: events.filter((e) => e.event_date === d).reduce((s, e) => s + e.amount, 0),
     retos: completions.filter((c) => c === d).length,
   }));
-  let acc = events.filter((e) => e.event_date < days[0]).reduce((s, e) => s + e.amount, 0);
+  let acc = events.filter((e) => e.event_date < (days[0] ?? today)).reduce((s, e) => s + e.amount, 0);
   const cumulative = daily.map((d, i) => {
     acc += d.xp;
     return { day: d.day, nivel: levelFromXp(acc).level, xp: acc, i };
