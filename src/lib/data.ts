@@ -59,7 +59,7 @@ export function useTodayChallenges() {
           .order("created_at");
       let { data, error } = await load();
       if (error) throw error;
-      if (!data.length) {
+      if (!data?.length) {
         const rows = generateChallenges(goals!, profile!.intensity as Intensity, today, user!.id).map((t) => ({
           user_id: user!.id,
           challenge_date: today,

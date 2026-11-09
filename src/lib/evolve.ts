@@ -28,7 +28,7 @@ export function localDate(d: Date = new Date()): string {
 }
 
 export function addDays(date: string, n: number): string {
-  const [y, m, d] = date.split("-").map(Number);
+  const [y = 1970, m = 1, d = 1] = date.split("-").map(Number);
   const dt = new Date(y, m - 1, d + n);
   return localDate(dt);
 }
@@ -125,7 +125,8 @@ export function generateChallenges(goals: Goal[], intensity: Intensity, date: st
   while (out.length < count && pools.some((p) => p.length > round)) {
     for (const p of pools) {
       if (out.length >= count) break;
-      if (p[round]) out.push(p[round]);
+      const t = p[round];
+      if (t) out.push(t);
     }
     round++;
   }

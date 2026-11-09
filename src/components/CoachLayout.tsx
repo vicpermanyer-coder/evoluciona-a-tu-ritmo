@@ -58,7 +58,7 @@ export function AiBanner() {
   );
 }
 
-export function ThreadList({ activeId }: { activeId?: string }) {
+export function ThreadList({ activeId }: { activeId?: string | undefined }) {
   const { data, isLoading } = useConversations();
   const create = useNewConversation();
   return (
