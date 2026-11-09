@@ -68,6 +68,16 @@ export function longestStreak(activeDates: Iterable<string>): number {
   return best;
 }
 
+/** Flags each challenge as done when a persisted completion exists for it. */
+export function markCompleted<T extends { id: string }>(challenges: T[], completedIds: Iterable<string>) {
+  const set = new Set(completedIds);
+  return challenges.map((c) => ({ ...c, done: set.has(c.id) }));
+}
+
+export function countCompleted(challenges: { done: boolean }[]) {
+  return challenges.filter((c) => c.done).length;
+}
+
 type Template = { key: string; goal: Goal; title: string; description: string; xp: number };
 
 export const CHALLENGE_TEMPLATES: Template[] = [

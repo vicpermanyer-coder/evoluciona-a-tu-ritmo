@@ -16,8 +16,12 @@ export function ChallengeList({ limit }: { limit?: number }) {
       if (error) throw error;
       return data as { awarded: boolean; xp: number };
     },
-    onSuccess: (r) => {
+    onSuccess: (r, id) => {
       if (r.awarded) toast.success(`¡Reto completado! +${r.xp} XP`);
+      // Update the shared cache right away so the dashboard counter and bar reflect it instantly.
+      qc.setQueriesData<{ id: string; done: boolean }[]>({ queryKey: ["challenges"] }, (old) =>
+        old?.map((c) => (c.id === id ? { ...c, done: true } : c)),
+      );
       qc.invalidateQueries({ queryKey: ["challenges"] });
       qc.invalidateQueries({ queryKey: ["xp"] });
       qc.invalidateQueries({ queryKey: ["completions"] });

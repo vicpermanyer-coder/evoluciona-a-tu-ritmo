@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { generateChallenges, localDate, type Goal, type Intensity } from "./evolve";
+import { generateChallenges, localDate, markCompleted, type Goal, type Intensity } from "./evolve";
 
 export function useUser() {
   return useQuery({
@@ -53,7 +53,7 @@ export function useTodayChallenges() {
       const load = () =>
         supabase
           .from("daily_challenges")
-          .select("*, challenge_completions(id)")
+          .select("*")
           .eq("user_id", user!.id)
           .eq("challenge_date", today)
           .order("created_at");
@@ -76,7 +76,14 @@ export function useTodayChallenges() {
         ({ data, error } = await load());
         if (error) throw error;
       }
-      return (data ?? []).map((c) => ({ ...c, done: (c.challenge_completions?.length ?? 0) > 0 }));
+      // Completion state comes from the persisted completion records for this user and local day.
+      const { data: comps, error: cErr } = await supabase
+        .from("challenge_completions")
+        .select("challenge_id")
+        .eq("user_id", user!.id)
+        .eq("completed_date", today);
+      if (cErr) throw cErr;
+      return markCompleted(data ?? [], comps.map((c) => c.challenge_id));
     },
   });
 }
