@@ -4,7 +4,7 @@ import { AppShell } from "@/components/AppShell";
 import { ChallengeList } from "@/components/ChallengeList";
 import { Progress } from "@/components/ui/progress";
 import { useCompletions, useProfile, useTodayChallenges, useXpEvents } from "@/lib/data";
-import { currentStreak, levelFromXp, localDate } from "@/lib/evolve";
+import { countCompleted, currentStreak, levelFromXp, localDate } from "@/lib/evolve";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
@@ -35,7 +35,7 @@ function Dashboard() {
   const todayXp = xp.filter((e) => e.event_date === today).reduce((s, e) => s + e.amount, 0);
   const lvl = levelFromXp(total);
   const streak = currentStreak(completions, today);
-  const done = challenges.filter((c) => c.done).length;
+  const done = countCompleted(challenges);
 
   return (
     <AppShell>

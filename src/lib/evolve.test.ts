@@ -21,6 +21,13 @@ describe("evolve rules", () => {
     expect(new Set(list.map((c) => c.key)).size).toBe(list.length);
   });
 
+  it("marks challenges done from persisted completion ids and counts them", async () => {
+    const { markCompleted, countCompleted } = await import("./evolve");
+    const list = markCompleted([{ id: "a" }, { id: "b" }, { id: "c" }, { id: "d" }], ["b", "d", "b"]);
+    expect(list.map((c) => c.done)).toEqual([false, true, false, true]);
+    expect(countCompleted(list)).toBe(2);
+  });
+
   it("streak counts consecutive days, tolerating no activity yet today", () => {
     const today = "2026-03-10";
     expect(currentStreak([addDays(today, -1), addDays(today, -2)], today)).toBe(2);

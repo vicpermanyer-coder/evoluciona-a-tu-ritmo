@@ -7,7 +7,7 @@ const MODEL = "openai/gpt-6-astra";
 const GATEWAY = "https://ai.gateway.lovable.dev/v1";
 
 export const getAiStatus = createServerFn({ method: "GET" }).handler(async () => {
-  return { configured: Boolean(process.env.LOVABLE_API_KEY) };
+  return { configured: Boolean(process.env["LOVABLE_API_KEY"]) };
 });
 
 export const sendCoachMessage = createServerFn({ method: "POST" })
@@ -38,7 +38,7 @@ export const sendCoachMessage = createServerFn({ method: "POST" })
       await supabase.from("conversations").update({ updated_at: new Date().toISOString() }).eq("id", conv.id);
     }
 
-    const apiKey = process.env.LOVABLE_API_KEY;
+    const apiKey = process.env["LOVABLE_API_KEY"];
     if (!apiKey) return { status: "not_configured" as const };
 
     const [{ data: history }, { data: profile }, { data: goals }] = await Promise.all([

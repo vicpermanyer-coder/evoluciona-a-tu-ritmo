@@ -28,7 +28,7 @@ export function localDate(d: Date = new Date()): string {
 }
 
 export function addDays(date: string, n: number): string {
-  const [y, m, d] = date.split("-").map(Number);
+  const [y = 1970, m = 1, d = 1] = date.split("-").map(Number);
   const dt = new Date(y, m - 1, d + n);
   return localDate(dt);
 }
@@ -66,6 +66,16 @@ export function longestStreak(activeDates: Iterable<string>): number {
     prev = d;
   }
   return best;
+}
+
+/** Flags each challenge as done when a persisted completion exists for it. */
+export function markCompleted<T extends { id: string }>(challenges: T[], completedIds: Iterable<string>) {
+  const set = new Set(completedIds);
+  return challenges.map((c) => ({ ...c, done: set.has(c.id) }));
+}
+
+export function countCompleted(challenges: { done: boolean }[]) {
+  return challenges.filter((c) => c.done).length;
 }
 
 type Template = { key: string; goal: Goal; title: string; description: string; xp: number };
@@ -115,7 +125,8 @@ export function generateChallenges(goals: Goal[], intensity: Intensity, date: st
   while (out.length < count && pools.some((p) => p.length > round)) {
     for (const p of pools) {
       if (out.length >= count) break;
-      if (p[round]) out.push(p[round]);
+      const t = p[round];
+      if (t) out.push(t);
     }
     round++;
   }

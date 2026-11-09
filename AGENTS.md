@@ -28,3 +28,8 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## Project rules
+- XP, challenge completions and habit logs are written only through the `complete_challenge` / `toggle_habit` security-definer RPCs; unique constraints on `xp_events(source_type, source_id)` and `challenge_completions(challenge_id)` are what prevent double rewards.
+- Derive a challenge's "done" state from `challenge_completions` rows for the user and local date (via `markCompleted`), never from an embedded PostgREST relation: the one-to-one FK makes the embed return an object, not an array.
+- Daily dates are the user's local calendar date (`localDate()`), passed to the backend explicitly.
