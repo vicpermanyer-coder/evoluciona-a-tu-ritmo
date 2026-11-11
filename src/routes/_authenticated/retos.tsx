@@ -16,7 +16,7 @@ export const Route = createFileRoute("/_authenticated/retos")({
   component: () => (
     <AppShell title="Retos de hoy">
       <p className="-mt-4 mb-6 text-sm text-muted-foreground">
-        Se renuevan cada día a medianoche (tu hora local). Cada reto otorga XP una sola vez.
+        Seleccionados de la biblioteca de retos de EVOLVE según tus objetivos e intensidad (no los genera una IA). Se renuevan cada día a medianoche, tu hora local, y cada reto otorga XP una sola vez.
       </p>
       <ChallengeList />
     </AppShell>

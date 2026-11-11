@@ -15,6 +15,13 @@
       "when": 1794124230486,
       "tag": "0001_migration",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794391658914,
+      "tag": "0002_personalized_goals_intensity",
+      "breakpoints": true
     }
   ]
 }

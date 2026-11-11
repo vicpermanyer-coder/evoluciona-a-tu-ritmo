@@ -33,3 +33,6 @@ use the editor.
 - XP, challenge completions and habit logs are written only through the `complete_challenge` / `toggle_habit` security-definer RPCs; unique constraints on `xp_events(source_type, source_id)` and `challenge_completions(challenge_id)` are what prevent double rewards.
 - Derive a challenge's "done" state from `challenge_completions` rows for the user and local date (via `markCompleted`), never from an embedded PostgREST relation: the one-to-one FK makes the embed return an object, not an array.
 - Daily dates are the user's local calendar date (`localDate()`), passed to the backend explicitly.
+- Daily challenges are created only by the `ensureDailyChallenges` server function (curated library in `src/lib/evolve.ts`) via the service-role-only `insert_daily_challenges` RPC; users have no INSERT/DELETE on `daily_challenges`, so they cannot forge XP or reset completed challenges.
+- A day's challenge set is never modified once created; preference changes apply from the next local day.
+- Goals, intensity and name are saved together through the `save_preferences` RPC (security invoker, single transaction) so a failed save never leaves a user without goals.

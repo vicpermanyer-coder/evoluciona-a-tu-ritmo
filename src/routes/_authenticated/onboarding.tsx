@@ -40,13 +40,12 @@ function Onboarding() {
     if (!user) return;
     setSaving(true);
     try {
-      const { error: pErr } = await supabase
-        .from("profiles")
-        .upsert({ id: user.id, display_name: name.trim(), intensity, onboarded: true, updated_at: new Date().toISOString() });
-      if (pErr) throw pErr;
-      await supabase.from("goals").delete().eq("user_id", user.id);
-      const { error: gErr } = await supabase.from("goals").insert(goals.map((goal) => ({ user_id: user.id, goal })));
-      if (gErr) throw gErr;
+      const { error } = await supabase.rpc("save_preferences", {
+        p_display_name: name.trim(),
+        p_intensity: intensity,
+        p_goals: goals,
+      });
+      if (error) throw error;
       await qc.invalidateQueries();
       navigate({ to: "/dashboard" });
     } catch {
@@ -80,14 +79,14 @@ function Onboarding() {
           {step === 1 && (
             <>
               <h1 className="text-3xl font-semibold">¿En qué quieres mejorar?</h1>
-              <p className="mt-2 text-muted-foreground">Elige uno o varios. Puedes cambiarlo después.</p>
+              <p className="mt-2 text-muted-foreground">Elige uno o varios. Tus retos se repartirán entre ellos y podrás cambiarlos en tu perfil.</p>
               <div className="mt-6"><GoalPicker value={goals} onChange={setGoals} /></div>
             </>
           )}
           {step === 2 && (
             <>
               <h1 className="text-3xl font-semibold">¿Qué ritmo prefieres?</h1>
-              <p className="mt-2 text-muted-foreground">Define cuántos retos recibirás cada día.</p>
+              <p className="mt-2 text-muted-foreground">Recibirás 4 retos al día. La intensidad define cuánto tiempo dura cada uno.</p>
               <div className="mt-6"><IntensityPicker value={intensity} onChange={setIntensity} /></div>
             </>
           )}
@@ -98,7 +97,7 @@ function Onboarding() {
             <Button disabled={!canNext} onClick={() => setStep(step + 1)} className="bg-gradient-primary">Continuar</Button>
           ) : (
             <Button disabled={saving} onClick={finish} className="bg-gradient-primary">
-              {saving && <Loader2 className="h-4 w-4 animate-spin" />} Empezar
+              {saving && <Loader2 className="h-4 w-4 animate-spin" />} {saving ? "Guardando…" : "Empezar"}
             </Button>
           )}
         </div>

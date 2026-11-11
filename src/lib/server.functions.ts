@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { getRequest } from "@tanstack/react-start/server";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { goalLabel, intensityInfo } from "./evolve";
 
 const MODEL = "openai/gpt-6-astra";
 const GATEWAY = "https://ai.gateway.lovable.dev/v1";
@@ -59,7 +60,15 @@ export const sendCoachMessage = createServerFn({ method: "POST" })
       apiKey,
       headers: { "Lovable-API-Key": apiKey, "X-Lovable-AIG-SDK": "vercel-ai-sdk" },
     });
-    const instructions = `Eres el coach de EVOLVE, una app de mejora personal. Responde siempre en español, con calidez, de forma concreta y breve (máximo ~180 palabras), con pasos accionables. No des diagnósticos médicos. Usuario: ${profile?.display_name ?? "sin nombre"}. Objetivos: ${(goals ?? []).map((g) => g.goal).join(", ") || "no definidos"}. Intensidad: ${profile?.intensity ?? "media"}.`;
+    const goalNames = (goals ?? []).map((g) => goalLabel(g.goal));
+    const level = intensityInfo(profile?.intensity ?? "media");
+    const instructions = [
+      "Eres el coach de EVOLVE, una app de mejora personal. Responde siempre en español, con calidez, de forma concreta y breve (máximo ~180 palabras), con pasos accionables. No des diagnósticos médicos ni sustituyas a profesionales de la salud.",
+      `Usuario: ${profile?.display_name ?? "sin nombre"}.`,
+      `Objetivos de mejora elegidos por el usuario: ${goalNames.join(", ") || "no definidos"}. Prioriza consejos relacionados con estos objetivos y conéctalos entre sí cuando tenga sentido.`,
+      `Intensidad elegida: ${level.label} (${level.desc}). Ajusta la duración y exigencia de lo que propongas a ese tiempo disponible.`,
+      "Si el usuario pide algo fuera de sus objetivos, ayúdale igualmente.",
+    ].join("\n");
 
     let text = "";
     try {
