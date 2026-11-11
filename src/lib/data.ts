@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { generateChallenges, localDate, markCompleted, type Goal, type Intensity } from "./evolve";
+import { localDate, markCompleted, normalizeGoals } from "./evolve";
+import { ensureDailyChallenges } from "./challenges.functions";
 
 export function useUser() {
   return useQuery({
@@ -35,20 +36,22 @@ export function useGoals() {
     queryFn: async () => {
       const { data, error } = await supabase.from("goals").select("goal").eq("user_id", user!.id);
       if (error) throw error;
-      return data.map((g) => g.goal as Goal);
+      return normalizeGoals(data.map((g) => g.goal));
     },
   });
 }
 
-/** Today's challenges for the user's local date; generates them once if missing. */
+/**
+ * Today's challenges for the user's local date. The set is created once per day on the server
+ * from the curated library and then stays fixed, even if goals or intensity change later.
+ */
 export function useTodayChallenges() {
   const { data: user } = useUser();
   const { data: profile } = useProfile();
-  const { data: goals } = useGoals();
   const today = localDate();
   return useQuery({
     queryKey: ["challenges", user?.id, today],
-    enabled: !!user && !!profile && !!goals,
+    enabled: !!user && !!profile?.onboarded,
     queryFn: async () => {
       const load = () =>
         supabase
@@ -56,23 +59,12 @@ export function useTodayChallenges() {
           .select("*")
           .eq("user_id", user!.id)
           .eq("challenge_date", today)
-          .order("created_at");
+          .order("created_at")
+          .order("template_key");
       let { data, error } = await load();
       if (error) throw error;
       if (!data?.length) {
-        const rows = generateChallenges(goals!, profile!.intensity as Intensity, today, user!.id).map((t) => ({
-          user_id: user!.id,
-          challenge_date: today,
-          template_key: t.key,
-          title: t.title,
-          description: t.description,
-          category: t.goal,
-          xp: t.xp,
-        }));
-        const ins = await supabase
-          .from("daily_challenges")
-          .upsert(rows, { onConflict: "user_id,challenge_date,template_key", ignoreDuplicates: true });
-        if (ins.error) throw ins.error;
+        await ensureDailyChallenges({ data: { localDate: today } });
         ({ data, error } = await load());
         if (error) throw error;
       }

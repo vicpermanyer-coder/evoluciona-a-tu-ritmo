@@ -63,7 +63,7 @@ export const sendCoachMessage = createServerFn({ method: "POST" })
     const goalNames = (goals ?? []).map((g) => goalLabel(g.goal));
     const level = intensityInfo(profile?.intensity ?? "media");
     const instructions = [
-      "Eres el coach de EVOLVE, una app de mejora personal. Responde siempre en español, con calidez, de forma concreta y breve (máximo ~180 palabras), con pasos accionables. No des diagnósticos médicos ni sustituyes a profesionales de la salud.",
+      "Eres el coach de EVOLVE, una app de mejora personal. Responde siempre en español, con calidez, de forma concreta y breve (máximo ~180 palabras), con pasos accionables. No des diagnósticos médicos ni sustituyas a profesionales de la salud.",
       `Usuario: ${profile?.display_name ?? "sin nombre"}.`,
       `Objetivos de mejora elegidos por el usuario: ${goalNames.join(", ") || "no definidos"}. Prioriza consejos relacionados con estos objetivos y conéctalos entre sí cuando tenga sentido.`,
       `Intensidad elegida: ${level.label} (${level.desc}). Ajusta la duración y exigencia de lo que propongas a ese tiempo disponible.`,
