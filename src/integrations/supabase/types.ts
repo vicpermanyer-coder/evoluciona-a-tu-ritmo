@@ -377,6 +377,14 @@ export type Database = {
         Args: { p_challenge_id: string; p_local_date: string }
         Returns: Json
       }
+      insert_daily_challenges: {
+        Args: { p_date: string; p_rows: Json; p_user_id: string }
+        Returns: number
+      }
+      save_preferences: {
+        Args: { p_display_name: string; p_goals: string[]; p_intensity: string }
+        Returns: undefined
+      }
       toggle_habit: {
         Args: { p_habit_id: string; p_local_date: string }
         Returns: Json
