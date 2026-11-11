@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Loader2, LogOut, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { AppShell, useSignOut } from "@/components/AppShell";
+import { AppShell, StateBox, useSignOut } from "@/components/AppShell";
 import { GoalPicker, IntensityPicker } from "@/components/GoalPicker";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -33,8 +33,10 @@ export const Route = createFileRoute("/_authenticated/perfil")({
 
 function Profile() {
   const { data: user } = useUser();
-  const { data: profile } = useProfile();
-  const { data: savedGoals } = useGoals();
+  const profileQ = useProfile();
+  const goalsQ = useGoals();
+  const profile = profileQ.data;
+  const savedGoals = goalsQ.data;
   const qc = useQueryClient();
   const navigate = useNavigate();
   const signOut = useSignOut();
@@ -53,16 +55,16 @@ function Profile() {
     if (!user || name.trim().length < 2 || !goals.length) return;
     setSaving(true);
     try {
-      const { error } = await supabase.from("profiles").update({ display_name: name.trim(), intensity, updated_at: new Date().toISOString() }).eq("id", user.id);
+      const { error } = await supabase.rpc("save_preferences", {
+        p_display_name: name.trim(),
+        p_intensity: intensity,
+        p_goals: goals,
+      });
       if (error) throw error;
-      const { error: dErr } = await supabase.from("goals").delete().eq("user_id", user.id);
-      if (dErr) throw dErr;
-      const { error: gErr } = await supabase.from("goals").insert(goals.map((goal) => ({ user_id: user.id, goal })));
-      if (gErr) throw gErr;
       await qc.invalidateQueries();
-      toast.success("Perfil actualizado. Los nuevos objetivos se aplicarán a los retos de mañana.");
+      toast.success("Preferencias guardadas. Tus retos de hoy se mantienen; los nuevos se aplicarán desde mañana.");
     } catch {
-      toast.error("No se pudieron guardar los cambios.");
+      toast.error("No se pudieron guardar los cambios. Inténtalo de nuevo.");
     } finally {
       setSaving(false);
     }
@@ -86,17 +88,38 @@ function Profile() {
   return (
     <AppShell title="Perfil">
       <p className="-mt-4 mb-6 text-sm text-muted-foreground">{user?.email}</p>
-      <section className="space-y-6 rounded-2xl border border-border bg-card p-5">
-        <div className="space-y-2">
-          <Label htmlFor="pname">Nombre visible</Label>
-          <Input id="pname" maxLength={40} value={name} onChange={(e) => setName(e.target.value)} />
-        </div>
-        <div className="space-y-2"><Label>Objetivos</Label><GoalPicker value={goals} onChange={setGoals} /></div>
-        <div className="space-y-2"><Label>Intensidad</Label><IntensityPicker value={intensity} onChange={setIntensity} /></div>
-        <Button onClick={save} disabled={saving || name.trim().length < 2 || !goals.length} className="bg-gradient-primary">
-          {saving && <Loader2 className="h-4 w-4 animate-spin" />} Guardar cambios
-        </Button>
-      </section>
+      {profileQ.isLoading || goalsQ.isLoading ? (
+        <div className="h-96 animate-pulse rounded-2xl bg-card" aria-label="Cargando tus preferencias" />
+      ) : profileQ.error || goalsQ.error ? (
+        <StateBox>
+          No pudimos cargar tus preferencias.{" "}
+          <button className="font-semibold text-primary" onClick={() => { profileQ.refetch(); goalsQ.refetch(); }}>Reintentar</button>
+        </StateBox>
+      ) : (
+        <section className="space-y-6 rounded-2xl border border-border bg-card p-5" aria-labelledby="prefs-title">
+          <h2 id="prefs-title" className="text-lg font-semibold">Tus objetivos e intensidad</h2>
+          <div className="space-y-2">
+            <Label htmlFor="pname">Nombre visible</Label>
+            <Input id="pname" maxLength={40} value={name} onChange={(e) => setName(e.target.value)} />
+          </div>
+          <div className="space-y-2">
+            <Label>Objetivos de mejora</Label>
+            <p className="text-sm text-muted-foreground">Elige uno o varios. Tus 4 retos diarios se reparten entre ellos.</p>
+            <GoalPicker value={goals} onChange={setGoals} />
+            {!goals.length && <p className="text-sm text-destructive">Elige al menos un objetivo.</p>}
+          </div>
+          <div className="space-y-2">
+            <Label>Intensidad de los retos</Label>
+            <IntensityPicker value={intensity} onChange={setIntensity} />
+          </div>
+          <p className="text-xs text-muted-foreground">
+            Cambiar tus preferencias no afecta a tu XP, nivel, racha ni a los retos que ya has completado. Los retos de hoy se mantienen hasta medianoche.
+          </p>
+          <Button onClick={save} disabled={saving || name.trim().length < 2 || !goals.length} className="bg-gradient-primary">
+            {saving && <Loader2 className="h-4 w-4 animate-spin" />} {saving ? "Guardando…" : "Guardar cambios"}
+          </Button>
+        </section>
+      )}
 
       <section className="mt-6 flex flex-wrap gap-3">
         <Button variant="secondary" onClick={signOut}><LogOut className="h-4 w-4" /> Cerrar sesión</Button>
