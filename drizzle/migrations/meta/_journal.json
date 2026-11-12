@@ -22,6 +22,13 @@
       "when": 1794391658914,
       "tag": "0002_personalized_goals_intensity",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1794510283153,
+      "tag": "0003_outfit_analyses",
+      "breakpoints": true
     }
   ]
 }
