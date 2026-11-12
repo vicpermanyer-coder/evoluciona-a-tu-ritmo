@@ -1,6 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getRequest } from "@tanstack/react-start/server";
 import { z } from "zod";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import type { Database } from "@/integrations/supabase/types";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import {
   OCCASION_MAX,
@@ -140,10 +142,7 @@ async function runAnalysis(id: string, bytes: Uint8Array, mime: OutfitMime, occa
 }
 
 /** Downloads the photo through the caller's own session, so storage access rules prove ownership. */
-async function readOwnPhoto(
-  supabase: { storage: { from: (b: string) => { download: (p: string) => Promise<{ data: Blob | null; error: unknown }> } } },
-  path: string,
-) {
+async function readOwnPhoto(supabase: SupabaseClient<Database>, path: string) {
   const { data, error } = await supabase.storage.from("uploads").download(path);
   if (error || !data) throw new Error("No encontramos tu foto.");
   if (data.size > OUTFIT_MAX_BYTES) throw new Error("La imagen supera los 10 MB.");
