@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedAnalisisRouteImport } from './routes/_authenticated/analisis'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedEstiloRouteImport } from './routes/_authenticated/estilo'
 import { Route as AuthenticatedHabitosRouteImport } from './routes/_authenticated/habitos'
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
 import { Route as AuthenticatedPerfilRouteImport } from './routes/_authenticated/perfil'
@@ -44,6 +45,11 @@ const AuthenticatedAnalisisRoute = AuthenticatedAnalisisRouteImport.update({
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedEstiloRoute = AuthenticatedEstiloRouteImport.update({
+  id: '/estilo',
+  path: '/estilo',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedHabitosRoute = AuthenticatedHabitosRouteImport.update({
@@ -88,6 +94,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/analisis': typeof AuthenticatedAnalisisRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/estilo': typeof AuthenticatedEstiloRoute
   '/habitos': typeof AuthenticatedHabitosRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/perfil': typeof AuthenticatedPerfilRoute
@@ -101,6 +108,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/analisis': typeof AuthenticatedAnalisisRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/estilo': typeof AuthenticatedEstiloRoute
   '/habitos': typeof AuthenticatedHabitosRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/perfil': typeof AuthenticatedPerfilRoute
@@ -116,6 +124,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/_authenticated/analisis': typeof AuthenticatedAnalisisRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/estilo': typeof AuthenticatedEstiloRoute
   '/_authenticated/habitos': typeof AuthenticatedHabitosRoute
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
   '/_authenticated/perfil': typeof AuthenticatedPerfilRoute
@@ -131,6 +140,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/analisis'
     | '/dashboard'
+    | '/estilo'
     | '/habitos'
     | '/onboarding'
     | '/perfil'
@@ -144,6 +154,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/analisis'
     | '/dashboard'
+    | '/estilo'
     | '/habitos'
     | '/onboarding'
     | '/perfil'
@@ -158,6 +169,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/_authenticated/analisis'
     | '/_authenticated/dashboard'
+    | '/_authenticated/estilo'
     | '/_authenticated/habitos'
     | '/_authenticated/onboarding'
     | '/_authenticated/perfil'
@@ -208,6 +220,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/estilo': {
+      id: '/_authenticated/estilo'
+      path: '/estilo'
+      fullPath: '/estilo'
+      preLoaderRoute: typeof AuthenticatedEstiloRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/habitos': {
@@ -265,6 +284,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAnalisisRoute: typeof AuthenticatedAnalisisRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedEstiloRoute: typeof AuthenticatedEstiloRoute
   AuthenticatedHabitosRoute: typeof AuthenticatedHabitosRoute
   AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
   AuthenticatedPerfilRoute: typeof AuthenticatedPerfilRoute
@@ -277,6 +297,7 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAnalisisRoute: AuthenticatedAnalisisRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedEstiloRoute: AuthenticatedEstiloRoute,
   AuthenticatedHabitosRoute: AuthenticatedHabitosRoute,
   AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
   AuthenticatedPerfilRoute: AuthenticatedPerfilRoute,
