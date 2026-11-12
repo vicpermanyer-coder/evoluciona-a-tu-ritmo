@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 import { Loader2, Shirt, Trash2, UtensilsCrossed, Dumbbell, Upload } from "lucide-react";
@@ -76,6 +76,7 @@ function Analysis() {
     <AppShell title="Análisis de imagen">
       <div className="mb-6 rounded-xl border border-primary/30 bg-accent p-4 text-sm text-accent-foreground">
         <strong>Próximamente:</strong> el análisis con IA aún no está conectado. Tus fotos se guardan de forma privada, pero no generamos puntuaciones ni estimaciones de calorías.
+        {" "}Para recibir consejos de tu outfit con IA, usa <Link to="/estilo" className="font-semibold underline">Analizar mi estilo</Link>.
       </div>
       <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-label="Categoría">
         {CATS.map(({ id, label, icon: Icon }) => (

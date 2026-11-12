@@ -1,6 +1,6 @@
 import { Link, Navigate, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { Home, Target, Repeat, MessageCircle, LineChart, User, Camera, LogOut, Loader2 } from "lucide-react";
+import { Home, Target, Repeat, MessageCircle, LineChart, User, Camera, LogOut, Loader2, Shirt } from "lucide-react";
 import type { ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useProfile } from "@/lib/data";
@@ -12,6 +12,7 @@ const NAV = [
   { to: "/habitos", label: "Hábitos", icon: Repeat },
   { to: "/coach", label: "Coach", icon: MessageCircle },
   { to: "/progreso", label: "Progreso", icon: LineChart },
+  { to: "/estilo", label: "Analizar mi estilo", icon: Shirt },
   { to: "/analisis", label: "Análisis", icon: Camera },
   { to: "/perfil", label: "Perfil", icon: User },
 ] as const;
@@ -73,9 +74,14 @@ export function AppShell({ children, title }: { children: ReactNode; title?: str
       <div className="flex-1 pb-24 md:pb-10">
         <header className="flex items-center justify-between px-5 pt-6 md:hidden">
           <Logo />
-          <Link to="/analisis" aria-label="Análisis de imagen" className="rounded-full bg-secondary p-2">
-            <Camera className="h-4 w-4" />
-          </Link>
+          <div className="flex gap-2">
+            <Link to="/estilo" aria-label="Analizar mi estilo" className="rounded-full bg-secondary p-2">
+              <Shirt className="h-4 w-4" />
+            </Link>
+            <Link to="/analisis" aria-label="Análisis de imagen" className="rounded-full bg-secondary p-2">
+              <Camera className="h-4 w-4" />
+            </Link>
+          </div>
         </header>
         <main className="mx-auto w-full max-w-4xl px-5 pt-6 md:px-10 md:pt-10">
           {title && <h1 className="mb-6 text-3xl font-semibold md:text-4xl">{title}</h1>}
