@@ -36,3 +36,5 @@ use the editor.
 - Daily challenges are created only by the `ensureDailyChallenges` server function (curated library in `src/lib/evolve.ts`) via the service-role-only `insert_daily_challenges` RPC; users have no INSERT/DELETE on `daily_challenges`, so they cannot forge XP or reset completed challenges.
 - A day's challenge set is never modified once created; preference changes apply from the next local day.
 - Goals, intensity and name are saved together through the `save_preferences` RPC (security invoker, single transaction) so a failed save never leaves a user without goals.
+- Outfit analysis rows (`outfit_analyses`) are written only by the `analyzeOutfit`/`retryOutfitAnalysis` server functions after downloading the photo with the caller's own session (storage RLS proves ownership); users have only SELECT/DELETE, so AI results cannot be forged from the browser.
+- Outfit photos are stored flat as `<userId>/outfit-<uuid>.<ext>` in the private `uploads` bucket so account deletion (which lists only the user's top-level folder) removes them; show them only via short-lived signed URLs.
