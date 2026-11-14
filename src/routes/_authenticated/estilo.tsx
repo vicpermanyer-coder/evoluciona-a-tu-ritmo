@@ -40,13 +40,13 @@ async function uploadWithProgress(path: string, file: File, onProgress: (pct: nu
   const { data } = await supabase.auth.getSession();
   const token = data.session?.access_token;
   if (!token) throw new Error("Tu sesión ha caducado. Vuelve a iniciar sesión.");
-  const base = String(import.meta.env.VITE_SUPABASE_URL).replace(/\/+$/, "");
+  const base = String(import.meta.env['VITE_SUPABASE_URL']).replace(/\/+$/, "");
   const url = `${base}/storage/v1/object/uploads/${path.split("/").map(encodeURIComponent).join("/")}`;
   await new Promise<void>((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.open("POST", url);
     xhr.setRequestHeader("Authorization", `Bearer ${token}`);
-    xhr.setRequestHeader("apikey", String(import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY));
+    xhr.setRequestHeader("apikey", String(import.meta.env['VITE_SUPABASE_PUBLISHABLE_KEY']));
     xhr.setRequestHeader("Content-Type", file.type);
     xhr.setRequestHeader("x-upsert", "false");
     xhr.upload.onprogress = (e) => e.lengthComputable && onProgress(Math.round((e.loaded / e.total) * 100));
