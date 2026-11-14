@@ -261,6 +261,71 @@ export type Database = {
           },
         ]
       }
+      meals: {
+        Row: {
+          ai_model: string | null
+          created_at: string
+          eaten_at: string
+          feedback: string | null
+          id: string
+          items: Json
+          kcal_high: number
+          kcal_low: number
+          local_date: string
+          meal_type: string
+          storage_path: string | null
+          total_carbs: number
+          total_fat: number
+          total_kcal: number
+          total_protein: number
+          user_id: string
+        }
+        Insert: {
+          ai_model?: string | null
+          created_at?: string
+          eaten_at: string
+          feedback?: string | null
+          id?: string
+          items?: Json
+          kcal_high?: number
+          kcal_low?: number
+          local_date: string
+          meal_type: string
+          storage_path?: string | null
+          total_carbs?: number
+          total_fat?: number
+          total_kcal?: number
+          total_protein?: number
+          user_id: string
+        }
+        Update: {
+          ai_model?: string | null
+          created_at?: string
+          eaten_at?: string
+          feedback?: string | null
+          id?: string
+          items?: Json
+          kcal_high?: number
+          kcal_low?: number
+          local_date?: string
+          meal_type?: string
+          storage_path?: string | null
+          total_carbs?: number
+          total_fat?: number
+          total_kcal?: number
+          total_protein?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "meals_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       messages: {
         Row: {
           content: string
