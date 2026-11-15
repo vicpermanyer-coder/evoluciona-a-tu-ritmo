@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedAnalisisRouteImport } from './routes/_authenticated/analisis'
+import { Route as AuthenticatedComidaRouteImport } from './routes/_authenticated/comida'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedEstiloRouteImport } from './routes/_authenticated/estilo'
 import { Route as AuthenticatedHabitosRouteImport } from './routes/_authenticated/habitos'
@@ -40,6 +41,11 @@ const AuthRoute = AuthRouteImport.update({
 const AuthenticatedAnalisisRoute = AuthenticatedAnalisisRouteImport.update({
   id: '/analisis',
   path: '/analisis',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedComidaRoute = AuthenticatedComidaRouteImport.update({
+  id: '/comida',
+  path: '/comida',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
@@ -93,6 +99,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/analisis': typeof AuthenticatedAnalisisRoute
+  '/comida': typeof AuthenticatedComidaRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/estilo': typeof AuthenticatedEstiloRoute
   '/habitos': typeof AuthenticatedHabitosRoute
@@ -107,6 +114,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/analisis': typeof AuthenticatedAnalisisRoute
+  '/comida': typeof AuthenticatedComidaRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/estilo': typeof AuthenticatedEstiloRoute
   '/habitos': typeof AuthenticatedHabitosRoute
@@ -123,6 +131,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/_authenticated/analisis': typeof AuthenticatedAnalisisRoute
+  '/_authenticated/comida': typeof AuthenticatedComidaRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/estilo': typeof AuthenticatedEstiloRoute
   '/_authenticated/habitos': typeof AuthenticatedHabitosRoute
@@ -139,6 +148,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/analisis'
+    | '/comida'
     | '/dashboard'
     | '/estilo'
     | '/habitos'
@@ -153,6 +163,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/analisis'
+    | '/comida'
     | '/dashboard'
     | '/estilo'
     | '/habitos'
@@ -168,6 +179,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/_authenticated/analisis'
+    | '/_authenticated/comida'
     | '/_authenticated/dashboard'
     | '/_authenticated/estilo'
     | '/_authenticated/habitos'
@@ -213,6 +225,13 @@ declare module '@tanstack/react-router' {
       path: '/analisis'
       fullPath: '/analisis'
       preLoaderRoute: typeof AuthenticatedAnalisisRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/comida': {
+      id: '/_authenticated/comida'
+      path: '/comida'
+      fullPath: '/comida'
+      preLoaderRoute: typeof AuthenticatedComidaRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/dashboard': {
@@ -283,6 +302,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAnalisisRoute: typeof AuthenticatedAnalisisRoute
+  AuthenticatedComidaRoute: typeof AuthenticatedComidaRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedEstiloRoute: typeof AuthenticatedEstiloRoute
   AuthenticatedHabitosRoute: typeof AuthenticatedHabitosRoute
@@ -296,6 +316,7 @@ interface AuthenticatedRouteRouteChildren {
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAnalisisRoute: AuthenticatedAnalisisRoute,
+  AuthenticatedComidaRoute: AuthenticatedComidaRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedEstiloRoute: AuthenticatedEstiloRoute,
   AuthenticatedHabitosRoute: AuthenticatedHabitosRoute,
